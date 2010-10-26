@@ -42,4 +42,13 @@ class ChangelogsController < ApplicationController
       @selected_tracker_ids = (default_trackers || selectable_trackers).collect {|t| t.id.to_s }
     end
   end
+
+  # Find project of id params[:project_id]
+  # TODO: Compatibility for Redmine 1.0. Remove after Redmine 1.1
+  def find_project_by_project_id
+    @project = Project.find(params[:project_id])
+  rescue ActiveRecord::RecordNotFound
+    render_404
+  end
+
 end
