@@ -37,6 +37,7 @@ module RedmineWebratHelper
 
   def visit_issue_page(issue)
     visit '/issues/' + issue.id.to_s
+    assert_response :success
   end
 
   def visit_issue_bulk_edit_page(issues)
