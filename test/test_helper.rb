@@ -44,6 +44,17 @@ module RedmineWebratHelper
     visit url_for(:controller => 'issues', :action => 'bulk_edit', :ids => issues.collect(&:id))
   end
 
+  def visit_changelogs_for_project(project)
+    visit_project project
+
+    click_link "Issues"
+    assert_response :success
+
+    click_link "Change log"
+    assert_response :success
+    assert_equal "/projects/#{project.to_param}/changelog", current_path
+  end
+
   # Cleanup current_url to remove the host; sometimes it's present, sometimes it's not
   def current_path
     return nil if current_url.nil?
@@ -59,7 +70,7 @@ end
 class ActiveSupport::TestCase
   def assert_forbidden
     assert_response :forbidden
-    assert_template 'common/403'
+    assert_template 'common/error'
   end
 
   def configure_plugin(configuration_change={})
