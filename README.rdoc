@@ -2,10 +2,6 @@
 
 Show the changelogs for a project in Redmine. Was removed in the Redmine core in r3162.
 
-== Features
-
-TODO: fill in features
-
 == Getting the plugin
 
 A copy of the plugin can be downloaded from {Little Stream Software}[https://projects.littlestreamsoftware.com/projects/redmine-changelogs/files] or from {GitHub}[http://github.com/edavis10/redmine_changelogs]
@@ -14,12 +10,12 @@ A copy of the plugin can be downloaded from {Little Stream Software}[https://pro
 == Installation and Setup
 
 1. Follow the Redmine plugin installation steps at: http://www.redmine.org/wiki/redmine/Plugins 
-2. Run the plugin migrations +rake db:migrate_plugins+
-3. Restart your Redmine web servers (e.g. mongrel, thin, mod_rails)
+2. Restart your Redmine web servers (e.g. mongrel, thin, mod_rails)
+3. Configure the View Issue Changelogs permission
 
 == Usage
 
-TODO: Add usage
+A changelog link will appear on the sidebar on the Issues pages (e.g. list, details)
 
 == License
 
