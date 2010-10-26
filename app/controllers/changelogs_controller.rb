@@ -10,7 +10,7 @@ class ChangelogsController < ApplicationController
   
   def show
     @trackers = @project.trackers.find(:all, :conditions => ["is_in_chlog=?", true], :order => 'position')
-    retrieve_selected_tracker_ids(@trackers)
+    retrieve_selected_tracker_ids(@trackers, Tracker.all)
     @with_subprojects = params[:with_subprojects].nil? ? Setting.display_subprojects_issues? : (params[:with_subprojects] == '1')
     project_ids = @with_subprojects ? @project.self_and_descendants.collect(&:id) : [@project.id]
     
@@ -39,7 +39,7 @@ class ChangelogsController < ApplicationController
     if ids = params[:tracker_ids]
       @selected_tracker_ids = (ids.is_a? Array) ? ids.collect { |id| id.to_i.to_s } : ids.split('/').collect { |id| id.to_i.to_s }
     else
-      @selected_tracker_ids = selectable_trackers.collect {|t| t.id.to_s }
+      @selected_tracker_ids = (default_trackers || selectable_trackers).collect {|t| t.id.to_s }
     end
   end
 end
