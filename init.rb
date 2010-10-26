@@ -6,7 +6,7 @@ Redmine::Plugin.register :redmine_changelogs do
   description 'Show the changelogs for a project in Redmine'
   url 'https://projects.littlestreamsoftware.com/projects/redmine-changelogs'
   author_url 'http://www.littlestreamsoftware.com'
-  version '0.1.0'
+  version '0.1.1'
 
   permission(:view_issue_changelogs, {:changelogs => [:show]})
 end
