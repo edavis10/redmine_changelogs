@@ -15,14 +15,14 @@ class ChangelogsController < ApplicationController
     project_ids = @with_subprojects ? @project.self_and_descendants.collect(&:id) : [@project.id]
     
     @versions = @project.shared_versions.sort
-    
+    @versions += @project.rolled_up_versions.visible if @with_subprojects
+    @versions = @versions.uniq.sort
+
     @issues_by_version = {}
     unless @selected_tracker_ids.empty?
       @versions.each do |version|
         conditions = {:tracker_id => @selected_tracker_ids, "#{IssueStatus.table_name}.is_closed" => true}
-        if !@project.versions.include?(version)
-          conditions.merge!(:project_id => project_ids)
-        end
+        conditions.merge!(:project_id => project_ids)
         issues = version.fixed_issues.visible.find(:all,
                                                    :include => [:status, :tracker, :priority],
                                                    :conditions => conditions,

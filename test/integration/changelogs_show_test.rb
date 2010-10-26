@@ -10,6 +10,11 @@ class ChangelogsShowTest < ActionController::IntegrationTest
     @issue2 = Issue.generate_for_project!(@project, :status => @closed_status, :fixed_version => @version1)
     @issue3 = Issue.generate_for_project!(@project, :status => @closed_status, :fixed_version => @version2)
     @issue4 = Issue.generate_for_project!(@project, :status => @closed_status, :fixed_version => @version2)
+
+    @subproject = Project.generate!
+    @subproject.set_parent!(@project)
+    @subproject_version = Version.generate!(:project => @subproject).reload
+    @subproject_issue = Issue.generate_for_project!(@subproject, :status => @closed_status, :fixed_version => @subproject_version)
   end
   
   context "for a user with permission to view changelogs" do
@@ -17,6 +22,7 @@ class ChangelogsShowTest < ActionController::IntegrationTest
       @user = User.generate!(:login => "existing", :password => "existing", :password_confirmation => "existing")
       @role = Role.generate!(:permissions => [:view_issues, :view_issue_changelogs])
       User.add_to_project(@user, @project, @role)
+      User.add_to_project(@user, @subproject, @role)
       login_as
       visit_changelogs_for_project(@project)
     end
@@ -42,6 +48,19 @@ class ChangelogsShowTest < ActionController::IntegrationTest
         assert_select "li", :text => /#{@issue4.subject}/
       end
 
+    end
+
+    should "be able to show subprojects" do
+      check "Subprojects"
+      click_button "Apply"
+
+      assert_response :success
+
+      assert_select "a[name=?]", @subproject_version
+      assert_select "ul#version-#{@subproject_version.id}" do
+        assert_select "li", :text => /#{@subproject_issue.subject}/
+      end
+      
     end
     
   end
